@@ -1,48 +1,47 @@
 package kodlama.io.rentacar.business.concretes;
 
 import kodlama.io.rentacar.business.abstracts.BrandService;
-import kodlama.io.rentacar.entities.concretes.Brand;
-import kodlama.io.rentacar.repository.abstracts.BrandRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import kodlama.io.rentacar.entities.Brand;
+import kodlama.io.rentacar.repository.BrandRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class BrandManager implements BrandService {
     private final BrandRepository brandRepository;
-
-    @Autowired
-    public BrandManager(BrandRepository brandRepository) {
-        this.brandRepository = brandRepository;
-    }
-
     @Override
     public List<Brand> getAll() {
-        //iş kuralları
-        if (brandRepository.getAll().size() == 0) {
-            throw new RuntimeException("Marka Bulunamadı.");
-        }
-        return brandRepository.getAll();
+        return brandRepository.findAll();
     }
 
     @Override
-    public Brand getById(int id) {
-        return brandRepository.getById(id);
+    public Brand geyById(int id) {
+        checkIfBrandExists(id);
+        return brandRepository.findById(id).orElseThrow();
     }
 
     @Override
     public Brand add(Brand brand) {
-        return brandRepository.add(brand);
+        return brandRepository.save(brand);
     }
 
     @Override
     public Brand update(int id, Brand brand) {
-        return brandRepository.update(id, brand);
+        checkIfBrandExists(id);
+        brand.setId(id);
+        return brandRepository.save(brand);
     }
 
     @Override
     public void delete(int id) {
-        brandRepository.delete(id);
+        checkIfBrandExists(id);
+        brandRepository.deleteById(id);
+    }
+    private void checkIfBrandExists(int id){
+        if(!brandRepository.existsById(id))
+            throw new RuntimeException("Marka Bulunamadı.");
     }
 }
