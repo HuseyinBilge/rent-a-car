@@ -9,9 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CreateCarRequest {
-    private int modelYear;
-    private String plate;
-    private double dailyPrice;
-    private int modelId;
+public class CreateMaintenanceRequest {
+    private int carId;
+    private String information;
 }

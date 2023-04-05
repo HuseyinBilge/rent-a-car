@@ -7,6 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
+import static jakarta.persistence.EnumType.*;
+
 @Entity
 @Getter
 @Setter
@@ -20,10 +24,13 @@ public class Car {
     private int modelYear;
     private String plate;
     private double dailyPrice;
-    @Enumerated
+    @Enumerated(value = STRING)
     private State state;
     @ManyToOne
     @JoinColumn(name = "model_id")
     //@JsonManagedReference
     private Model model;
+
+    @OneToMany(mappedBy = "car")
+    private List<Maintenance> maintenances;
 }
