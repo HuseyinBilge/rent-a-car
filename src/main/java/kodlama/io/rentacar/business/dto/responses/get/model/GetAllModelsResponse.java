@@ -1,4 +1,4 @@
-package kodlama.io.rentacar.business.dto.responses.get;
+package kodlama.io.rentacar.business.dto.responses.get.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

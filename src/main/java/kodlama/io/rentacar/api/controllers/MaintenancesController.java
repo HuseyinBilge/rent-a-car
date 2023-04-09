@@ -4,8 +4,8 @@ import kodlama.io.rentacar.business.abstracts.MaintenanceService;
 import kodlama.io.rentacar.business.dto.requests.create.CreateMaintenanceRequest;
 import kodlama.io.rentacar.business.dto.requests.update.UpdateMaintenanceRequest;
 import kodlama.io.rentacar.business.dto.responses.create.CreateMaintenanceResponse;
-import kodlama.io.rentacar.business.dto.responses.get.GetAllMaintenanceResponse;
-import kodlama.io.rentacar.business.dto.responses.get.GetMaintenanceResponse;
+import kodlama.io.rentacar.business.dto.responses.get.maintenance.GetAllMaintenancesResponse;
+import kodlama.io.rentacar.business.dto.responses.get.maintenance.GetMaintenanceResponse;
 import kodlama.io.rentacar.business.dto.responses.update.UpdateMaintenanceResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ import java.util.List;
 public class MaintenancesController {
     private final MaintenanceService maintenanceService;
     @GetMapping
-    public List<GetAllMaintenanceResponse> getAll(){
+    public List<GetAllMaintenancesResponse> getAll(){
         return maintenanceService.getAll();
     }
     @GetMapping("{id}")
@@ -41,8 +41,8 @@ public class MaintenancesController {
         maintenanceService.delete(id);
     }
 
-    @PutMapping("/return/{carId}")
-    public GetMaintenanceResponse returnCarFromMaintenance(@PathVariable int carId){
+    @PutMapping("/return")
+    public GetMaintenanceResponse returnCarFromMaintenance(@RequestParam int carId){
         return maintenanceService.returnCarFromMaintenance(carId);
     }
 }

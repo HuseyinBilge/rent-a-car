@@ -4,8 +4,8 @@ import kodlama.io.rentacar.business.abstracts.CarService;
 import kodlama.io.rentacar.business.dto.requests.create.CreateCarRequest;
 import kodlama.io.rentacar.business.dto.requests.update.UpdateCarRequest;
 import kodlama.io.rentacar.business.dto.responses.create.CreateCarResponse;
-import kodlama.io.rentacar.business.dto.responses.get.GetAllCarsResponse;
-import kodlama.io.rentacar.business.dto.responses.get.GetCarResponse;
+import kodlama.io.rentacar.business.dto.responses.get.car.GetAllCarsResponse;
+import kodlama.io.rentacar.business.dto.responses.get.car.GetCarResponse;
 import kodlama.io.rentacar.business.dto.responses.update.UpdateCarResponse;
 import kodlama.io.rentacar.entities.Car;
 import kodlama.io.rentacar.entities.enums.State;
@@ -80,7 +80,7 @@ public class CarManager implements CarService {
             cars = carRepository.findAll();
 
         }
-        else cars = carRepository.findAllByStateIsNot(State.MAINTANCE);
+        else cars = carRepository.findAllByStateIsNot(State.MAINTENANCE);
         return cars;
     }
 }
