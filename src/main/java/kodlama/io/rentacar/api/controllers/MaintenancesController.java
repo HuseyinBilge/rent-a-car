@@ -18,31 +18,36 @@ import java.util.List;
 @RequestMapping("/api/maintenances")
 public class MaintenancesController {
     private final MaintenanceService maintenanceService;
+
     @GetMapping
-    public List<GetAllMaintenancesResponse> getAll(){
+    public List<GetAllMaintenancesResponse> getAll() {
         return maintenanceService.getAll();
     }
+
     @GetMapping("{id}")
-    public GetMaintenanceResponse getById(@PathVariable int id){
+    public GetMaintenanceResponse getById(@PathVariable int id) {
         return maintenanceService.getById(id);
     }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateMaintenanceResponse add(@RequestBody CreateMaintenanceRequest request){
+    public CreateMaintenanceResponse add(@RequestBody CreateMaintenanceRequest request) {
         return maintenanceService.add(request);
     }
+
     @PutMapping("{id}")
-    public UpdateMaintenanceResponse update(@PathVariable int id, @RequestBody UpdateMaintenanceRequest request){
-        return maintenanceService.update(id,request);
+    public UpdateMaintenanceResponse update(@PathVariable int id, @RequestBody UpdateMaintenanceRequest request) {
+        return maintenanceService.update(id, request);
     }
+
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int id){
+    public void delete(@PathVariable int id) {
         maintenanceService.delete(id);
     }
 
     @PutMapping("/return")
-    public GetMaintenanceResponse returnCarFromMaintenance(@RequestParam int carId){
+    public GetMaintenanceResponse returnCarFromMaintenance(@RequestParam int carId) {
         return maintenanceService.returnCarFromMaintenance(carId);
     }
 }

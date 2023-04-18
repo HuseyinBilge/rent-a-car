@@ -9,7 +9,7 @@ import lombok.Setter;
 
 import java.util.List;
 
-import static jakarta.persistence.EnumType.*;
+import static jakarta.persistence.EnumType.STRING;
 
 @Entity
 @Getter

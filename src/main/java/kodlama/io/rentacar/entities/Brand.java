@@ -19,7 +19,7 @@ public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-   // @Column(name="ad")
+    // @Column(name="ad")
     private String name;
     @OneToMany(mappedBy = "brand")
     //@JsonBackReference

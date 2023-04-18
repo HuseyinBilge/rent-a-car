@@ -1,6 +1,5 @@
-package kodlama.io.rentacar.entities;
+package kodlama.io.rentacar.business.dto.responses.get.invoice;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,23 +7,20 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "rentals")
-public class Rental {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Getter
+@Setter
+public class GetAllInvoicesResponse {
+
     private int id;
+    private String cardHolder;
+    private String modelName;
+    private String brandName;
+    private String plate;
+    private int modelYear;
     private double dailyPrice;
     private double totalPrice;
     private int rentedForDays;
-    private LocalDateTime startDate;
-
-    @ManyToOne
-    private Car car;
-
-
+    private LocalDateTime rentedAt;
 }

@@ -5,10 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PaymentRepository extends JpaRepository<Payment, Integer> {
     Payment findByCardNumber(String cardNumber);
+
     boolean existsByCardNumber(String cardNumber);
+
     boolean existsByCardNumberAndCardHolderAndCardExpirationMonthAndCardExpirationYearAndCardCvv(
             String cardNumber, String cardHolder, int expirationMonth, int expirationYear, String cardCvv
-            );
+    );
 
     // SPeL -> Spring Experssion Language
     //    @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END " +

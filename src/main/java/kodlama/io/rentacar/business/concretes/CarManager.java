@@ -7,6 +7,7 @@ import kodlama.io.rentacar.business.dto.responses.create.CreateCarResponse;
 import kodlama.io.rentacar.business.dto.responses.get.car.GetAllCarsResponse;
 import kodlama.io.rentacar.business.dto.responses.get.car.GetCarResponse;
 import kodlama.io.rentacar.business.dto.responses.update.UpdateCarResponse;
+import kodlama.io.rentacar.business.rules.CarBusinessRules;
 import kodlama.io.rentacar.entities.Car;
 import kodlama.io.rentacar.entities.enums.State;
 import kodlama.io.rentacar.repository.CarRepository;
@@ -21,10 +22,11 @@ import java.util.List;
 public class CarManager implements CarService {
     private final CarRepository carRepository;
     private final ModelMapper modelMapper;
+    private final CarBusinessRules rules;
 
 
     @Override
-    public List<GetAllCarsResponse> getAll(boolean  includeMaintenance) {
+    public List<GetAllCarsResponse> getAll(boolean includeMaintenance) {
         List<Car> cars = filterCarByMaintenanceState(includeMaintenance);
         List<GetAllCarsResponse> response = cars.stream()
                 .map(car -> modelMapper.map(car, GetAllCarsResponse.class)).toList();
@@ -33,7 +35,7 @@ public class CarManager implements CarService {
 
     @Override
     public GetCarResponse getById(int id) {
-        checkIfCarExists(id);
+        rules.checkIfCarExists(id);
         return modelMapper.map(carRepository.findById(id).orElseThrow(), GetCarResponse.class);
     }
 
@@ -48,7 +50,7 @@ public class CarManager implements CarService {
 
     @Override
     public UpdateCarResponse update(int id, UpdateCarRequest request) {
-        checkIfCarExists(id);
+        rules.checkIfCarExists(id);
         Car car = modelMapper.map(request, Car.class);
         car.setId(id);
         carRepository.save(car);
@@ -57,7 +59,7 @@ public class CarManager implements CarService {
 
     @Override
     public void delete(int id) {
-        checkIfCarExists(id);
+        rules.checkIfCarExists(id);
         carRepository.deleteById(id);
     }
 
@@ -69,18 +71,13 @@ public class CarManager implements CarService {
 
     }
 
-    private void checkIfCarExists(int id) {
-        if (!carRepository.existsById(id))
-            throw new RuntimeException("Car doesn't exist.");
-    }
 
-    private List<Car> filterCarByMaintenanceState(boolean  includeMaintenance){
+    private List<Car> filterCarByMaintenanceState(boolean includeMaintenance) {
         List<Car> cars;
-        if(includeMaintenance){
+        if (includeMaintenance) {
             cars = carRepository.findAll();
 
-        }
-        else cars = carRepository.findAllByStateIsNot(State.MAINTENANCE);
+        } else cars = carRepository.findAllByStateIsNot(State.MAINTENANCE);
         return cars;
     }
 }

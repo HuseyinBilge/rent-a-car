@@ -7,15 +7,20 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class UpdateRentalResponse {
+public class UpdateInvoiceResponse {
+
     private int id;
-    private int carId;
+    private String cardHolder;
+    private String modelName;
+    private String brandName;
+    private String plate;
+    private int modelYear;
     private double dailyPrice;
     private double totalPrice;
     private int rentedForDays;
-    private LocalDateTime startDate;
+    private LocalDateTime rentedAt;
 }

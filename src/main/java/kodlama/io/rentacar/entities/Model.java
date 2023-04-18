@@ -25,6 +25,6 @@ public class Model {
     private Brand brand;
 
     @OneToMany(mappedBy = "model")
-   // @JsonBackReference
+    // @JsonBackReference
     private List<Car> cars;
 }

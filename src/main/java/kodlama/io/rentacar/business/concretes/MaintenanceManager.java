@@ -8,6 +8,7 @@ import kodlama.io.rentacar.business.dto.responses.create.CreateMaintenanceRespon
 import kodlama.io.rentacar.business.dto.responses.get.maintenance.GetAllMaintenancesResponse;
 import kodlama.io.rentacar.business.dto.responses.get.maintenance.GetMaintenanceResponse;
 import kodlama.io.rentacar.business.dto.responses.update.UpdateMaintenanceResponse;
+import kodlama.io.rentacar.business.rules.MaintenanceBusinessRules;
 import kodlama.io.rentacar.entities.Maintenance;
 import kodlama.io.rentacar.entities.enums.State;
 import kodlama.io.rentacar.repository.MaintenanceRepository;
@@ -24,6 +25,7 @@ public class MaintenanceManager implements MaintenanceService {
     private final MaintenanceRepository maintenanceRepository;
     private final ModelMapper modelMapper;
     private final CarService carService;
+    private final MaintenanceBusinessRules rules;
 
     @Override
     public List<GetAllMaintenancesResponse> getAll() {
@@ -44,7 +46,7 @@ public class MaintenanceManager implements MaintenanceService {
 
     @Override
     public GetMaintenanceResponse returnCarFromMaintenance(int id) {
-        checkIfNotCarUnderMaintenance(id);
+        rules.checkIfCarIsNotUnderMaintenance(id);
         Maintenance maintenance = maintenanceRepository.findMaintenanceByCarIdAndIsCompletedFalse(id);
         maintenance.setCompleted(true);
         maintenance.setEndDate(LocalDateTime.now());
@@ -56,8 +58,8 @@ public class MaintenanceManager implements MaintenanceService {
 
     @Override
     public CreateMaintenanceResponse add(CreateMaintenanceRequest request) {
-        checkCarAvailabilityForMaintenance(request.getCarId());
-        checkIfCarUnderMaintenance(request.getCarId());
+        rules.checkCarAvailabilityForMaintenance(carService.getById(request.getCarId()).getState());
+        rules.checkIfCarUnderMaintenance(request.getCarId());
         Maintenance maintenance = modelMapper.map(request, Maintenance.class);
         maintenance.setId(0);
         maintenance.setCompleted(false);
@@ -83,26 +85,11 @@ public class MaintenanceManager implements MaintenanceService {
         makeCarAvailableIfIsCompletedFalse(id);
         maintenanceRepository.deleteById(id);
     }
-    //checkifexistbyid eklenecek
-    // checkiflerin ismi değişicek checkifcarexist
-    private void checkIfCarUnderMaintenance(int carId) {
-        if (maintenanceRepository.existsByCarIdAndIsCompletedFalse(carId))
-            throw new RuntimeException("Car is undermaintenance");
-    }
 
-    private void checkIfNotCarUnderMaintenance(int carId) {
-        if (!maintenanceRepository.existsByCarIdAndIsCompletedFalse(carId))
-            throw new RuntimeException("Bakımda böyle bir araç bulunamadı");
-    }
 
-    private void checkCarAvailabilityForMaintenance(int carId) {
-        if (carService.getById(carId).getState().equals(State.RENTED))
-            throw new RuntimeException("Araç kirada olduğu için bakıma alınamaz!");
-    }
-
-    private void makeCarAvailableIfIsCompletedFalse(int id){
+    private void makeCarAvailableIfIsCompletedFalse(int id) {
         int carId = maintenanceRepository.findById(id).orElseThrow().getCar().getId();
-        if(maintenanceRepository.existsByCarIdAndIsCompletedFalse(carId))
+        if (maintenanceRepository.existsByCarIdAndIsCompletedIsFalse(carId))
             carService.changeCarState(carId, State.AVAILABLE);
     }
 
