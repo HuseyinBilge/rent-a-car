@@ -64,7 +64,7 @@ public class RentalManager implements RentalService {
         modelMapper.map(request.getPaymentRequest(), createRentalPaymentRequest);
         createRentalPaymentRequest.setPrice(rental.getTotalPrice());
         paymentService.processRentalPayment(createRentalPaymentRequest);
-
+ 
         // Car car = mapper.map(carService.getById(request.getCarId()), Car.class);
         // rental.setCar(car);
 

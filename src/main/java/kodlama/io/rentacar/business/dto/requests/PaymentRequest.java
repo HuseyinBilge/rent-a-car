@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 public class PaymentRequest {
     @NotBlank(message = "Kart Numarası Boş Bırakılmaz.")
-    @Length(min = 16, max = 16, message = "KArt Numarası !6 Hane Olmalı")
+    @Length(min = 16, max = 16, message = "Kart Numarası !6 Hane Olmalı")
     private String cardNumber;
     @NotBlank
     @Length(min = 5)
